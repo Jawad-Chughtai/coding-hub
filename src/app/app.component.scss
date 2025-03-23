@@ -94,7 +94,7 @@
     width: 100%;
     height: calc(100vh - 70px);
     border: none;
-    background: #15222e;
+    background: #212529;
     color: #abb2bf;
     resize: none;
 }
@@ -110,80 +110,4 @@ ngx-monaco-editor {
 
 .monaco-editor .view-line {
     max-width: calc(100vw - 70px);
-}
-
-.start-button {
-    position: absolute;
-    overflow: hidden;
-    height: 100vh;
-    width: 100%;
-    top: 0;
-    background-color: rgba(0, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-}
-
-.start-button.hidden {
-    animation: hide 1s ease-out;
-}
-
-.start-button button {
-    border-radius: 50%;
-    height: 150px;
-    width: 150px;
-    font-weight: 600;
-    font-family: 'Inter', sans-serif;
-    border: none;
-    font-size: 1.5rem;
-    color: white;
-    background-color: #4a0072;
-    box-shadow:
-        0 0 20px rgba(138, 43, 226, 0.7),
-        0 0 40px rgba(138, 43, 226, 0.5),
-        inset 0 0 10px rgba(255, 255, 255, 0.2);
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-    transition: all 0.3s ease-in-out;
-    animation: glow-pulse 1s infinite alternate ease-in-out;
-    cursor: pointer;
-}
-
-.start-button button:hover {
-    box-shadow:
-        0 0 30px rgba(138, 43, 226, 0.9),
-        0 0 60px rgba(138, 43, 226, 0.7),
-        inset 0 0 15px rgba(255, 255, 255, 0.3);
-    transform: scale(1.05);
-}
-
-/* Glow Pulse Animation */
-@keyframes glow-pulse {
-    0% {
-        box-shadow:
-            0 0 20px rgba(138, 43, 226, 0.7),
-            0 0 40px rgba(138, 43, 226, 0.5),
-            inset 0 0 10px rgba(255, 255, 255, 0.2);
-    }
-
-    100% {
-        box-shadow:
-            0 0 30px rgba(138, 43, 226, 0.9),
-            0 0 60px rgba(138, 43, 226, 0.7),
-            inset 0 0 15px rgba(255, 255, 255, 0.3);
-    }
-}
-
-@keyframes hide {
-    0% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
-}
-
-.pointer {
-    cursor: pointer;
 }

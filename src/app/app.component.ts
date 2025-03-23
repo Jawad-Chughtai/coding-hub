@@ -5,10 +5,11 @@ import { debounceTime, Subject } from 'rxjs';
 import { css_beautify, html_beautify, js_beautify } from 'js-beautify';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { SharedService } from './shared/app.shared.service';
+import { StartButtonComponent } from "./shared/components/start-button/start-button.component";
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, FormsModule, MonacoEditorModule],
+  imports: [CommonModule, FormsModule, MonacoEditorModule, StartButtonComponent, StartButtonComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -72,17 +73,7 @@ export class AppComponent {
     });
   }
 
-  startClicked() {
-    this.hidden = true;
-    window.setTimeout(() => {
-      this.autoCodeStarted = true;
-      window.setTimeout(() => {
-        this.startCode();
-      }, 1000);
-    }, 1000);
-  }
-
-  resetCode(){
+  resetCode() {
     window.location.reload();
   }
 

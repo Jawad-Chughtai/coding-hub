@@ -1,1 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+.header {
+    background-color: #f1efe7;
+    box-sizing: border-box;
+    padding: 0 3rem;
+    text-align: center;
+}
+
+.header img {
+    height: 50px;
+    width: auto;
+}
+
+.pointer {
+    cursor: pointer;
+}

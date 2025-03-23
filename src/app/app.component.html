@@ -36,8 +36,4 @@
   </div>
 </div>
 
-<div class="start-button" [class.hidden]="hidden" *ngIf="!autoCodeStarted">
-  <button (click)="startClicked()">
-    Start
-  </button>
-</div>
+<app-start-button (onClick)="startCode()"></app-start-button>
