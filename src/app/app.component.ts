@@ -27,28 +27,77 @@ export class AppComponent {
 
   hidden: boolean = false;
   autoCodeStarted: boolean = false;
+  interval: any;
 
   constructor(sharedService: SharedService) {
     this.tabs = [
-      { name: 'HTML', text: sharedService.html, value: '', options: this.htmlEditorOptions },
-      { name: 'CSS', text: sharedService.css, value: '', options: this.cssEditorOptions },
-      { name: 'JS', text: sharedService.js, value: '', options: this.jsEditorOptions }
-    ]
+      { name: 'HTML', text: sharedService.html, value: '', options: this.htmlEditorOptions, editor: null },
+      { name: 'CSS', text: sharedService.css, value: '', options: this.cssEditorOptions, editor: null },
+      { name: 'JS', text: sharedService.js, value: '', options: this.jsEditorOptions, editor: null }
+    ];
+
     this.selectedTab = this.tabs[0].name;
 
     this.valueChanged$.pipe(debounceTime(300)).subscribe(() => {
-      this.updateFrame();
+      // this.updateFrame(true);
     });
   }
 
-  updateFrame() {
-    const src = `<style>${this.tabs[1].value}</style> <script>${this.tabs[2].value}</script>${this.tabs[0].value}`
+  onEditorInit(editor: any, tab: any) {
+    tab.editor = editor;
+  }
 
-    let iframe = document.getElementById("previewFrame") as HTMLIFrameElement;
-    if (iframe) {
-      iframe.srcdoc = src;
+  updateFrame(value: boolean, isStyle: boolean, isScript: boolean) {
+    const iframe = document.getElementById("previewFrame") as HTMLIFrameElement;
+    if (!iframe || !iframe.contentDocument) return;
+
+    if (value) {
+      this.interval = setInterval(() => {
+        const doc = iframe.contentDocument;
+        if (!doc) return;
+
+        if (isStyle) {
+          // Update or create <style> tag
+          let styleTag = doc.getElementById("live-style") as HTMLStyleElement;
+          if (!styleTag) {
+            styleTag = doc.createElement("style");
+            styleTag.id = "live-style";
+            doc.head.appendChild(styleTag);
+          }
+          styleTag.innerHTML = this.tabs[1].value;
+        }
+
+        // Update or create <script> tag
+        let scriptTag = doc.getElementById("live-script") as HTMLScriptElement;
+        if (!scriptTag) {
+          scriptTag = doc.createElement("script");
+          scriptTag.id = "live-script";
+          doc.body.appendChild(scriptTag);
+        } else {
+          scriptTag.remove(); // Remove and recreate script to re-execute
+          scriptTag = doc.createElement("script");
+          scriptTag.id = "live-script";
+          doc.body.appendChild(scriptTag);
+        }
+        scriptTag.innerHTML = this.tabs[2].value;
+
+        if (isStyle) {
+          // Instead of replacing body.innerHTML, update only the content area
+          let contentDiv = doc.getElementById("live-content");
+          if (!contentDiv) {
+            contentDiv = doc.createElement("div");
+            contentDiv.id = "live-content";
+            doc.body.appendChild(contentDiv);
+          }
+          contentDiv.innerHTML = this.tabs[0].value;
+        }
+      }, 300)
+    }
+    else {
+      clearInterval(this.interval)
     }
   }
+
 
   valueChanged() {
     this.valueChanged$.next('');
@@ -65,6 +114,18 @@ export class AppComponent {
         if (i < text.length) {
           tab.value += text[i];
           i++;
+          if (tab.editor) {
+            const model = tab.editor.getModel();
+            if (model) {
+              const lineCount = model.getLineCount();
+              const lastLineLength = model.getLineMaxColumn(lineCount);
+
+              // Move cursor to end of the text
+              tab.editor.setPosition({ lineNumber: lineCount, column: lastLineLength });
+              tab.editor.revealLine(lineCount); // Scroll to cursor
+              tab.editor.focus(); // Ensure cursor is visible
+            }
+          }
         } else {
           clearInterval(interval);
           resolve();
@@ -78,6 +139,19 @@ export class AppComponent {
   }
 
   startCode(tabIndex: any = 0) {
+    if (tabIndex === 0)
+      this.updateFrame(true, false, false);
+    if (tabIndex === 1) {
+      this.updateFrame(false, false, false);
+      this.updateFrame(true, true, false)
+    }
+    if (tabIndex === 2) {
+      this.updateFrame(false, false, false);
+      this.updateFrame(true, false, true)
+    }
+    if (tabIndex === 3)
+      this.updateFrame(false, false, false);
+
     if (tabIndex < 3) {
       const tab = this.tabs[tabIndex];
       this.beautify(tab);
@@ -85,10 +159,9 @@ export class AppComponent {
         this.selectedTab = tab.name;
         this.typeText(tab.text, tab, 10)
           .then(() => {
-            this.valueChanged();
             this.startCode(tabIndex + 1);
           });
-      }, 1000);
+      }, 500);
     }
   }
 

@@ -3,25 +3,18 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
-    // background: #15222e;
     overflow: hidden;
     flex-direction: column;
 }
 
 .main>div:first-child {
-    // flex-grow: 1;
     width: 100%;
 }
 
 .main>div:last-child {
-    // flex-grow: 1;
     margin-top: -6px;
-    height: 60vh;
+    height: 55vh;
     width: 100%;
-}
-
-.main>div {
-    // height: 100%;
 }
 
 .preview {
@@ -30,7 +23,7 @@
 }
 
 #previewFrame {
-    height: 40vh;
+    height: 45vh;
 }
 
 .nav {

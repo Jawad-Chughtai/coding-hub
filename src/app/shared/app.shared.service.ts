@@ -16,13 +16,13 @@ export class SharedService {
     overflow: hidden;
 }.container {
     position: relative;
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
 }
 
 #clock {
     font-family: 'Arial', sans-serif;
-    font-size: 40px;
+    font-size: 30px;
     font-weight: bold;
     color: #ff00ff;
     text-align: center;
