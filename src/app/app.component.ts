@@ -157,7 +157,7 @@ export class AppComponent {
       this.beautify(tab);
       window.setTimeout(() => {
         this.selectedTab = tab.name;
-        this.typeText(tab.text, tab, 10)
+        this.typeText(tab.text, tab, 50)
           .then(() => {
             this.startCode(tabIndex + 1);
           });
